@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ビューア</title>
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.144/Build/Cesium/Cesium.js"></script>
+  <link rel="stylesheet" href="https://cesium.com/downloads/cesiumjs/releases/1.144/Build/Cesium/Widgets/widgets.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside id="toolbar">
+    <h1>ビューア</h1>
+
+    <fieldset>
+      <legend>メインAsset</legend>
+      <div class="row">
+        <input id="mainAssetId" type="number" value="5173918" min="1">
+        <button id="loadMainButton" class="primary">切替</button>
+      </div>
+      <dl class="asset-info">
+        <div><dt>Name</dt><dd id="mainName">-</dd></div>
+        <div><dt>Type</dt><dd id="mainType">-</dd></div>
+        <div><dt>Status</dt><dd id="mainStatus">待機中</dd></div>
+      </dl>
+    </fieldset>
+
+    <fieldset>
+      <legend>追加モデル</legend>
+      <div class="row">
+        <input id="addAssetId" type="number" min="1" placeholder="Asset ID">
+        <button id="addAssetButton">追加</button>
+      </div>
+      <div id="modelList" class="model-list"></div>
+      <p class="hint">一覧からモデルを選択すると、移動ギズモが表示されます。追加対象は3D TilesまたはglTFです。</p>
+    </fieldset>
+
+    <fieldset id="gizmoPanel">
+      <legend>移動ギズモ</legend>
+      <div id="selectedModelName" class="status">モデル未選択</div>
+      <label for="gizmoStep">移動感度</label>
+      <div class="row"><input id="gizmoStep" type="number" min="0.01" step="0.1" value="1"><span>m相当</span></div>
+      <div class="row">
+        <button id="resetTransformButton">初期位置へ戻す</button>
+        <button id="deleteSelectedButton" class="danger">選択モデル削除</button>
+      </div>
+      <p class="hint">赤X・緑Y・青Zの軸をドラッグしてください。X/Yは水平、Zは上下方向です。</p>
+    </fieldset>
+
+    <fieldset id="pointCloudPanel">
+      <legend>点群</legend>
+      <div class="control-row"><label for="density">密度</label><input id="density" type="range" min="1" max="64" value="8"><output id="densityValue">8</output></div>
+      <div class="control-row"><label for="pointSize">点サイズ</label><input id="pointSize" type="range" min="1" max="10" value="2"><output id="pointSizeValue">2</output></div>
+      <div class="control-row"><label for="heightStep">高さ間隔</label><input id="heightStep" type="number" min="1" value="10"><span>m</span></div>
+      <button id="heightColorButton">高さ着色 OFF</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>計測・注記</legend>
+      <div class="row"><button id="coordButton">座標取得</button><button id="measureButton">距離計測</button><button id="clearMeasureButton" class="danger">計測クリア</button></div>
+      <div id="coordinateResult" class="result">経度: -<br>緯度: -<br>標高: -</div>
+      <div id="distanceResult" class="result">距離: -</div>
+      <button id="addPinButton">📍 ピン配置</button>
+      <p id="annotationInfo" class="status">ピン配置モード OFF</p>
+    </fieldset>
+  </aside>
+
+  <section id="popup" class="popup"><h2>注記</h2><label>タイトル</label><input id="titleInput"><label>メモ</label><textarea id="memoInput"></textarea><label>URL</label><input id="urlInput" type="url"><label>写真</label><input id="imageInput" type="file" accept="image/*"><div class="row right"><button id="saveAnnotation" class="primary">保存</button><button id="cancelAnnotation">キャンセル</button></div></section>
+  <section id="infoPopup" class="popup"><h2 id="infoTitle"></h2><div id="infoMemo"></div><a id="infoUrl" target="_blank" rel="noopener noreferrer"></a><img id="infoImage" alt="添付画像"><div class="row right"><button id="editAnnotation">編集</button><button id="deleteAnnotation" class="danger">削除</button><button id="closeInfo">閉じる</button></div></section>
+
+  <div id="cesiumContainer"></div>
+  <script src="app.js"></script>
+</body>
+</html>
